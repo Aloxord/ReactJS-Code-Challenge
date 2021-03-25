@@ -2,14 +2,21 @@ import React from 'react'
 
 import styled from 'styled-components'
 
+import useTodos from './useTodos'
+import TodoContext from './TodoContext'
+
 import MainLayout from './layouts/Main.layout'
 
 function App () {
 
+  const { list, createTodo, toggleComplete } = useTodos()
+
   return (
+    <TodoContext.Provider value={{ list, createTodo, toggleComplete }}>
       <Wrapper>
         <MainLayout />  
       </Wrapper>
+    </TodoContext.Provider>
   )
 }
 

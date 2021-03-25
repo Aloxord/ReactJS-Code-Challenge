@@ -1,16 +1,14 @@
-import React,{ useEffect } from 'react'
+import React,{ useEffect, useContext } from 'react'
 
 import styled from 'styled-components'
 
-import useTodos from '../useTodos'
+import TodoContext from '../TodoContext'
 
 import TodoItem from '../components/TodoItem'
 
 const Tasks = () =>{ 
 
-  const { list, toggleComplete } = useTodos()
-
-  useEffect(()=>console.log(list),[list])
+  const { list, toggleComplete } = useContext(TodoContext)
 
   return (
     <Wrapper>

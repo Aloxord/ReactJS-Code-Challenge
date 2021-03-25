@@ -1,14 +1,14 @@
-import React from 'react'
+import React,{ useContext } from 'react'
 
 import styled from 'styled-components'
 
-import useTodos from '../useTodos'
+import TodoContext from '../TodoContext'
 
 import AddTodo from '../components/AddTodo'
 
 const HeaderContainer = ()=>{
 
-  const { createTodo } = useTodos();
+  const { createTodo } = useContext(TodoContext);
 
   return (
     <Wrapper>
