@@ -11,21 +11,25 @@ function App () {
 
   const { 
     activeList,
+    filter,
     lists,
     createList, 
     createTodo, 
     toggleComplete,
-    changeActive
+    changeActive,
+    changeFilter
   } = useTodos()
 
   return (
     <TodoContext.Provider value={{ 
       activeList,
+      filter,
       lists, 
       createList, 
       createTodo, 
       toggleComplete,
-      changeActive
+      changeActive,
+      changeFilter
     }}>
       <Wrapper>
         <MainLayout />  
@@ -44,6 +48,7 @@ const Wrapper = styled.div`
   justify-content: flex-start;
   font-size: 24px;
   color: white;
+  overflow: hidden;
 `
 
 export default App

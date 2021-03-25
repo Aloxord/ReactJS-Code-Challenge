@@ -2,6 +2,7 @@ import { useEffect, useReducer } from 'react'
 
 const initialState = {
   activeList: '1',
+  filter:0,
   lists: {
     '1': {
       name: 'First list',
@@ -90,7 +91,15 @@ function reducer(state, action) {
           [id]: list
         }
       }
-    
+   
+    case 'change_filter':
+      const { newFilter } = action
+
+      return {
+        ...state,
+        filter: newFilter
+      }
+
     case 'create_todo':
       const { listId,text } = action.payload
       const item = {
@@ -128,7 +137,7 @@ function reducer(state, action) {
 
 function useTodos() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { activeList, lists } = state
+  const { activeList, lists, filter } = state
 
   useEffect(() => {
     dispatch({type: 'read_storage' })
@@ -140,6 +149,7 @@ function useTodos() {
 
   const createList = (name) => dispatch({ type: 'create_list', name})
   const changeActive = (newActive) => dispatch({ type: 'change_active', newActive})
+  const changeFilter = (newFilter) => dispatch({ type: 'change_filter', newFilter})
   const createTodo = (listId,text) => dispatch({ 
     type: 'create_todo',
     payload:{ listId,text } 
@@ -151,11 +161,13 @@ function useTodos() {
 
   return { 
     activeList,
+    filter,
     lists,
     createList,
     createTodo,
     toggleComplete,
-    changeActive
+    changeActive,
+    changeFilter
   }
 }
 

@@ -8,11 +8,19 @@ import TodoItem from '../components/TodoItem'
 
 const Tasks = () =>{ 
 
-  const { activeList, lists, toggleComplete } = useContext(TodoContext)
+  const { activeList, filter, lists, toggleComplete } = useContext(TodoContext)
+
+  const mustBe = filter === 1 ? false : filter === 2 ? true : null
 
   return (
     <Wrapper>
-      {lists[activeList].items.map(item => {
+      {lists[activeList].items
+        .filter(item => {
+          if(mustBe === null) return item
+
+          return item.completed === mustBe
+        })
+        .map(item => {
         const onComplete = e => {
           toggleComplete(activeList,item.id)
         }
