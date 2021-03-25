@@ -2,20 +2,13 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-import useTodos from './useTodos'
-
-import TodoList from './components/TodoList'
-import AddTodo from './components/AddTodo'
+import MainLayout from './layouts/Main.layout'
 
 function App () {
-  const { list, createTodo, toggleComplete } = useTodos()
 
   return (
       <Wrapper>
-        <TodosWrapper>
-          <AddTodo onAddTodo={createTodo} />
-          <TodoList items={list} toggleComplete={toggleComplete} />
-        </TodosWrapper>
+        <MainLayout />  
       </Wrapper>
   )
 }
@@ -29,12 +22,6 @@ const Wrapper = styled.div`
   justify-content: center;
   font-size: 24px;
   color: white;
-`
-
-const TodosWrapper = styled.div`
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
 `
 
 export default App
