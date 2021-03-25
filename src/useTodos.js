@@ -1,33 +1,39 @@
 import { useEffect, useReducer } from 'react'
 
 const initialState = {
-  list: [
-    {
-      id: 1,
-      completed: false,
-      text: 'Read README'
-    },
-    {
-      id: 2,
-      completed: false,
-      text: 'Add one todo'
-    },
-    {
-      id: 3,
-      completed: false,
-      text: 'Add filters'
-    },
-    {
-      id: 4,
-      completed: false,
-      text: 'Add multiple lists'
-    },
-    {
-      id: 5,
-      completed: false,
-      text: 'Optional: add tests'
+  activeList: '1',
+  lists: {
+    '1': {
+      name: 'First list',
+      items: [
+        {
+          id: 1,
+          completed: false,
+          text: 'Read README'
+        },
+        {
+          id: 2,
+          completed: false,
+        text: 'Add one todo'
+        },
+        {
+          id: 3,
+          completed: false,
+          text: 'Add filters'
+        },
+        {
+          id: 4,
+          completed: false,
+          text: 'Add multiple lists'
+        },
+        {
+          id: 5,
+          completed: false,
+          text: 'Optional: add tests'
+        }
+      ]
     }
-  ]
+  }
 }
 
 function syncStorage (state) {
@@ -49,31 +55,72 @@ function reducer(state, action) {
       return initialState
 
     case 'toggle_complete':
-        const { id } = action
+        const { idList, idItem } = action.payload
+        const pos = idItem - 1;
 
         return {
-          list: state.list.map(item => {
-            if (item.id === id) {
-              return {
-                ...item,
-                completed: !item.completed
-              }
-            }
+          ...state,
+          lists:{
+            ...state.lists,
+            [idList]:{
+              ...state.lists[idList],
+              items:[
+                ...state.lists[idList].items.map((e,idx) => {
+                  if(idx === pos) e.completed = !e.completed
 
-            return item
-          })
+                  return e
+                })
+              ]
+            }
+          }
         }
+
+    case 'create_list':
+      const { name } = action
+      const id = Object.keys(state.lists).length + 1
+      const list = {
+        name,
+        items:[]
+      }
+
+      return {
+        ...state,
+        lists:{
+          ...state.lists,
+          [id]: list
+        }
+      }
+    
     case 'create_todo':
-      const { text } = action
+      const { listId,text } = action.payload
       const item = {
         completed: false,
         text,
-        id: state.list.length + 1
+        id: state.lists[listId].items.length + 1
       }
 
-      const list = state.list.concat(item)
-      return { list }
+      return {
+        ...state,
+        lists:{
+          ...state.lists,
+          [listId]:{
+            ...state.lists[listId],
+            items:[
+              ...state.lists[listId].items,
+              item
+            ]
+          }
+        }
+      }
 
+    case 'change_active':
+      const { newActive } = action
+
+      return {
+        ...state,
+        activeList: newActive
+      }
+    
     default:
       throw new Error('Unknown type: ' + action.type);
   }
@@ -81,20 +128,35 @@ function reducer(state, action) {
 
 function useTodos() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { list } = state
+  const { activeList, lists } = state
 
   useEffect(() => {
     dispatch({type: 'read_storage' })
   }, [dispatch])
 
   useEffect(() => {
-    syncStorage({ list })
-  }, [list])
+    syncStorage({activeList, lists })
+  }, [lists,activeList])
 
-  const createTodo = (text) => dispatch({ type: 'create_todo', text })
-  const toggleComplete = (id) => dispatch({ type: 'toggle_complete', id })
+  const createList = (name) => dispatch({ type: 'create_list', name})
+  const changeActive = (newActive) => dispatch({ type: 'change_active', newActive})
+  const createTodo = (listId,text) => dispatch({ 
+    type: 'create_todo',
+    payload:{ listId,text } 
+  })
+  const toggleComplete = (idList,idItem) => dispatch({
+    type: 'toggle_complete',
+    payload:{ idList,idItem }
+  })
 
-  return { list, createTodo, toggleComplete }
+  return { 
+    activeList,
+    lists,
+    createList,
+    createTodo,
+    toggleComplete,
+    changeActive
+  }
 }
 
 export default useTodos

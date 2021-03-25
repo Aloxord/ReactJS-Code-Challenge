@@ -3,22 +3,24 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Header from '../containers/Header.container'
-import Tasks from '../containers/Tasks.container'
+import Body from './Body.layout'
 
 function MainLayout () {
 
   return (
     <TodosWrapper>
       <Header />
-      <Tasks />
+      <Body />
     </TodosWrapper>
   )
 }
 
 const TodosWrapper = styled.div`
-  max-width: 500px;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 
 export default MainLayout

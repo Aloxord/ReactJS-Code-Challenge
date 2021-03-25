@@ -9,10 +9,24 @@ import MainLayout from './layouts/Main.layout'
 
 function App () {
 
-  const { list, createTodo, toggleComplete } = useTodos()
+  const { 
+    activeList,
+    lists,
+    createList, 
+    createTodo, 
+    toggleComplete,
+    changeActive
+  } = useTodos()
 
   return (
-    <TodoContext.Provider value={{ list, createTodo, toggleComplete }}>
+    <TodoContext.Provider value={{ 
+      activeList,
+      lists, 
+      createList, 
+      createTodo, 
+      toggleComplete,
+      changeActive
+    }}>
       <Wrapper>
         <MainLayout />  
       </Wrapper>
@@ -24,9 +38,10 @@ const Wrapper = styled.div`
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
+  padding-top: 50px;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: 24px;
   color: white;
 `

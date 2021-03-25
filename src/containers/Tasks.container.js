@@ -1,4 +1,4 @@
-import React,{ useEffect, useContext } from 'react'
+import React,{ useContext } from 'react'
 
 import styled from 'styled-components'
 
@@ -8,13 +8,13 @@ import TodoItem from '../components/TodoItem'
 
 const Tasks = () =>{ 
 
-  const { list, toggleComplete } = useContext(TodoContext)
+  const { activeList, lists, toggleComplete } = useContext(TodoContext)
 
   return (
     <Wrapper>
-      {list.map(item => {
+      {lists[activeList].items.map(item => {
         const onComplete = e => {
-          toggleComplete(item.id)
+          toggleComplete(activeList,item.id)
         }
         console.log(item)
         return <TodoItem key={item.id} {...item} onComplete={onComplete} />
@@ -26,6 +26,9 @@ const Tasks = () =>{
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 500px;
+  max-height: 400px;
+  overflow: auto;
 `
 
 export default Tasks
